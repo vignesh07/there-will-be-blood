@@ -1,7 +1,7 @@
 from gcm import GCM
 import access_gcm
 #gcm = GCM('AIzaSyCbEFJvsCgSgGulvJMcdnkqnFFuygFvPJE')
-data = {'message': 'nigger yo'}
+data = {'message': 'testing'}
 
 gcmm = access_gcm.gcm
 reg_ids = access_gcm.reg_ids

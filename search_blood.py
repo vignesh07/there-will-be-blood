@@ -6,13 +6,59 @@ import json
 import pickle
 import authentication_file
 import math
+import re
+import regex
+import couchdb
+from gcm import GCM
+import access_gcm
 
+
+tweet_list=["#Thane #Mumbai Urgently needs A+ blood  At: Jupiter Hospital Call: 1237894560, 1236549870 #MuneerTweet Please ignore. Testing an app"
+]
+global_phone_list=[]
+location_list=["Chennai","Bangalore","Mumbai","Delhi","Kolkata","Pondicherry","Hyderabad"]
+
+blood_alpha =["AB Positive","AB positive","A positive","A Positive","B positive","B Positive","O positive","O Positive","AB negative","AB Negative", "A negative","A Negative","B negative","B Negative","O negative","O Negative",]
+blood_alpha_numeric= ["AB-","AB -","A+","A +","B+","B +","AB+","AB +","O+","O +","A-","A -","B-","B -","O-","O -"]
+
+def extract_phone(row):
+	m=re.search('[0-9]{10,}',row)
+	if m is None:
+		return None
+
+	phone=str(m.group(0))
+	if phone in global_phone_list:
+		return "already exists"
+	global_phone_list.append(phone)
+
+	return phone 
+
+
+def extract_location(row):
+	for loc in location_list:
+		if loc in row:
+			return loc
+
+	return ""
+
+
+def extract_bloodgroup(row):
+	for grp in blood_alpha:
+		if grp in row:
+			return grp
+
+	for grp in blood_alpha_numeric:
+		if grp in row:
+			return grp
+
+	return ""
 
 ckey = authentication_file.consumer_key
 csecret = authentication_file.consumer_secret
 atoken = authentication_file.access_token
 asecret = authentication_file.access_secret
 
+tweet_list=[]
 class listener(StreamListener):
 	def  on_data(self, data):
 		try:
@@ -27,10 +73,45 @@ class listener(StreamListener):
 			print data_loca
 			
 				
-			saveFile = open('workingdb.csv','a')
-			saveFile.write(to_print)
-			saveFile.write('\n')
-			saveFile.close()
+			#saveFile = open('workingdb.csv','a')
+			#saveFile.write(to_print)
+			#tweet_list.append(to_print)
+			#saveFile.write('\n')
+			#saveFile.close()
+		
+			
+			#f=file("workingdb.csv","rU")
+			#reader = csv.reader(f)
+
+		
+			
+			
+
+			row =to_print
+			phone = extract_phone(row)
+			location = extract_location(row)
+			group = extract_bloodgroup(row)
+
+			if (len(group)==0):
+				print "ERROR"
+
+			print "phone number is"
+			print phone
+
+			print "group is"
+			print group
+
+			print "location is"
+			print location
+
+			msg=group + " blood needed in "+ location+ " to donate contact: " + phone 
+			data = {'message': msg}
+
+			gcmm = access_gcm.gcm
+			reg_ids = access_gcm.reg_ids
+			response = gcmm.json_request(registration_ids=reg_ids, data=data)
+
+
 			return True
 		except BaseException,e:
 			print 'failed',str(e)

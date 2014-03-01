@@ -5,7 +5,9 @@ import string
 import re
 import regex
 import couchdb
-
+#import search_blood
+tweet_list=["#Thane #Mumbai Urgently needs A+ blood  At: Jupiter Hospital Call: 1237894560, 1236549870 #MuneerTweet Please ignore. Testing an app"
+]
 global_phone_list=[]
 
 def extract_phone(row):
@@ -52,32 +54,47 @@ reader = csv.reader(f)
 
 location_list=["Chennai","Bangalore","Mumbai","Delhi","Kolkata","Pondicherry","Hyderabad"]
 
-blood_alpha =["A positive","A Positive","B positive","B Positive","O positive","O Positive","AB positive","AB Positive", "A negative","A Negative","B negative","B Negative","O negative","O Negative","AB negative","AB Negative"]
-blood_alpha_numeric= ["A+","A +","B+","B +","AB+","AB +","O+","O +","A-","A -","B-","B -","O-","O -","AB-","AB -"]
+blood_alpha =["AB Positive","AB positive","A positive","A Positive","B positive","B Positive","O positive","O Positive","AB negative","AB Negative", "A negative","A Negative","B negative","B Negative","O negative","O Negative",]
+blood_alpha_numeric= ["AB-","AB -","A+","A +","B+","B +","AB+","AB +","O+","O +","A-","A -","B-","B -","O-","O -"]
+f=file("workingdb.csv","rU")
+reader = csv.reader(f)
 
-for roww in reader:
-	row =str(roww)
-	phone = extract_phone(row)
-	location = extract_location(row)
-	group = extract_bloodgroup(row)
+while(1):
+	
+	for roww in reader:
 
-	if (len(group)==0):
-		print "ERROR"
+		row =str(roww)
+		phone = extract_phone(row)
+		location = extract_location(row)
+		group = extract_bloodgroup(row)
 
-	print "phone number is"
-	print phone
+		if (len(group)==0):
+			print "ERROR"
 
-	print "group is"
-	print group
+		print "phone number is"
+		print phone
 
-	print "location is"
-	print location
+		print "group is"
+		print group
 
-	server=couchdb.Server('http://192.168.1.135:5984')
-	db=server['donors']
+		print "location is"
+		print location
 
-	doc_id,doc_rev= db.save({'bloodgroup':group,'location':location,'phone':phone})
+		"""server=couchdb.Server('http://blood.iriscouch.com:5984/')
+		db=server['donors']
 
+		doc_id,doc_rev= db.save({'bloodgroup':"H positive",'location':"CEG",'phone':"1223"})
+		doc=db[doc_id]
+		
+
+		map_fun='''function(doc){emit(doc['location'],[doc['location'],doc['phone'],doc['bloodgroup']])}'''
+		results=db.query(map_fun)
+
+		for x in results:
+		if(x.key=='Chennai'):
+			print x"""
+
+	
 
 
 
