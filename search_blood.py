@@ -27,7 +27,7 @@ class listener(StreamListener):
 			print data_loca
 			
 				
-			saveFile = open('newDB.csv','a')
+			saveFile = open('bloodDB.csv','a')
 			saveFile.write(to_print)
 			saveFile.write('\n')
 			saveFile.close()
@@ -43,4 +43,4 @@ auth = OAuthHandler(ckey,csecret)
 auth.set_access_token(atoken,asecret)
 
 twitterStream = Stream(auth,listener())
-twitterStream.filter(track=["Urgent","#bloodaid","A+ blood","B+ blood","A- blood","B- blood","blood group"])
+twitterStream.filter(track=["Need O+ blood","Need A+ blood","Need B+ blood","Need AB+ blood","Need A- blood","Need B- blood","Need O- blood","Need AB- blood","A positive blood","B positive blood","O positive blood","AB positive blood","A negative blood","B negative blood","AB negative blood","O negative blood"])
