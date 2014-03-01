@@ -4,6 +4,7 @@ from collections import defaultdict
 import string
 import re
 import regex
+import couchdb
 
 global_phone_list=[]
 
@@ -43,7 +44,7 @@ def extract_bloodgroup(row):
 
 
 
-f=file("bloodDB.csv","rU")
+f=file("workingdb.csv","rU")
 reader = csv.reader(f)
 
 
@@ -71,6 +72,13 @@ for roww in reader:
 
 	print "location is"
 	print location
+
+	server=couchdb.Server('http://192.168.1.135:5984')
+	db=server['donors']
+
+	doc_id,doc_rev= db.save({'bloodgroup':group,'location':location,'phone':phone})
+
+
 
 
 
