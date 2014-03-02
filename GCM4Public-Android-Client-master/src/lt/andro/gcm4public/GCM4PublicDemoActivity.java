@@ -10,8 +10,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -42,15 +48,38 @@ public class GCM4PublicDemoActivity extends Activity {
     private static final String TAG = GCM4PublicDemoActivity.class.getSimpleName();
 
     static String hometown="";
+    static int DnDlevel=0;
+    boolean partybool=false;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      
-    
+        
+        
+        final ProgressBar sb=(ProgressBar)findViewById(R.id.progressBar1);
+        final Switch sw;
         final Spinner spinner1;
         
+        final Context con=this.getApplicationContext();
+        
+       sw=(Switch)findViewById(R.id.switch1);
+       
+      sw.setOnClickListener(new OnClickListener(){
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			if(sw.isChecked())
+			{
+				partybool=true;
+				DnDlevel=2;
+				Toast.makeText(con,""+DnDlevel+"  "+partybool,Toast.LENGTH_LONG).show();
+				sb.setProgress(100);
+			}
+		}
+    	   
+       });
        
         	spinner1 = (Spinner) findViewById(R.id.spinner1);
         	spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

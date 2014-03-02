@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/blood_splash" />
+        android:src="@drawable/blood" />
 
 </LinearLayout>
