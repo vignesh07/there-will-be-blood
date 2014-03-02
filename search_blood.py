@@ -11,7 +11,7 @@ import regex
 import couchdb
 from gcm import GCM
 import access_gcm
-
+import urllib2
 
 tweet_list=["#Thane #Mumbai Urgently needs A+ blood  At: Jupiter Hospital Call: 1237894560, 1236549870 #MuneerTweet Please ignore. Testing an app"
 ]
@@ -19,7 +19,7 @@ global_phone_list=[]
 location_list=["Chennai","Bangalore","Mumbai","Delhi","Kolkata","Pondicherry","Hyderabad"]
 
 blood_alpha =["AB Positive","AB positive","A positive","A Positive","B positive","B Positive","O positive","O Positive","AB negative","AB Negative", "A negative","A Negative","B negative","B Negative","O negative","O Negative",]
-blood_alpha_numeric= ["AB-","AB -","A+","A +","B+","B +","AB+","AB +","O+","O +","A-","A -","B-","B -","O-","O -"]
+blood_alpha_numeric= ["AB-","AB -","A+","A +","AB+","AB +", "B+","B +", "O+","O +","A-","A -","B-","B -","O-","O -"]
 
 def extract_phone(row):
 	m=re.search('[0-9]{10,}',row)
@@ -71,7 +71,13 @@ class listener(StreamListener):
 			data_loc=data_string["user"]
 			data_loca=data_loc["location"].encode('utf-8')
 			print data_loca
-			
+			print "printing json"
+			print data_string
+			user= data_string["user"]
+			#user_id=user["id"]
+			name= str(user["screen_name"])
+			url="http://www.twitter.com/"+name+"/status/"+str(data_string["id"])
+			print url
 				
 			#saveFile = open('workingdb.csv','a')
 			#saveFile.write(to_print)
@@ -94,7 +100,9 @@ class listener(StreamListener):
 
 			if (len(group)==0):
 				print "ERROR"
-
+				return True
+			if("already" in phone):
+				return True
 			print "phone number is"
 			print phone
 
@@ -105,11 +113,17 @@ class listener(StreamListener):
 			print location
 
 			msg=group + " blood needed in "+ location+ " to donate contact: " + phone 
-			data = {'message': msg}
+			data = {'message': msg,'url':url}
 
-			gcmm = access_gcm.gcm
-			reg_ids = access_gcm.reg_ids
-			response = gcmm.json_request(registration_ids=reg_ids, data=data)
+			#gcmm = access_gcm.gcm
+			#reg_ids = access_gcm.reg_ids
+			#response = gcmm.json_request(registration_ids=reg_ids, data=data)
+
+			ws = "http://gcm4public.appspot.com/sendgcm2clients?apiKey=AIzaSyCbEFJvsCgSgGulvJMcdnkqnFFuygFvPJE&senderId=538441063246&title=There_Will_Be_Blood&message=" + group + "%2B+blood+needed+in+" + location + "+to+donate+contact:+" + phone + "&url=" + url
+
+			print ws
+
+			urllib2.urlopen(ws).read()
 
 
 			return True
