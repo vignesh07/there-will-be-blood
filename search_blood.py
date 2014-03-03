@@ -22,7 +22,7 @@ blood_alpha =["AB Positive","AB positive","A positive","A Positive","B positive"
 blood_alpha_numeric= ["AB-","AB -","A+","A +","AB+","AB +", "B+","B +", "O+","O +","A-","A -","B-","B -","O-","O -"]
 
 def extract_phone(row):
-	m=re.search('[0-9]{10,}',row)
+	m=re.search('[+91]?[0]?[0-9]{10,}',row)
 	if m is None:
 		return None
 
