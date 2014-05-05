@@ -76,7 +76,7 @@ class listener(StreamListener):
 			user= data_string["user"]
 			#user_id=user["id"]
 			name= str(user["screen_name"])
-			url="http://www.twitter.com/"+name+"/status/"+str(data_string["id"])
+			url="http://www.twitter.com/"+name+"/status/"+str(data_string["id"])  #structuring a string such that the url of the tweet is sent along with the notification
 			print url
 				
 			#saveFile = open('workingdb.csv','a')
